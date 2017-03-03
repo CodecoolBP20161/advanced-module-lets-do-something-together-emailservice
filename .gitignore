@@ -15,6 +15,7 @@ hs_err_pid*
 actimateEmailService/.idea/
 actimateEmailService/actimateEmailService.iml
 actimateEmailService/target/
+.idea/
 
 # config
 actimateEmailService/src/main/resources/db.properties
