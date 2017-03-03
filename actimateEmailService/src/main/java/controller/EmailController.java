@@ -26,9 +26,9 @@ public class EmailController {
         String emailString = req.queryParams("emails");
         try {
             emailAddressDao.save(new ArrayList<>(Arrays.asList(
-                    emailString.split(","))),
-                    req.queryParams("subject"),
-                    req.queryParams("template"));
+                    emailString.replaceAll(" ", "+").split(","))),
+                    req.queryParams("template"),
+                    req.queryParams("subject"));
         } catch (NullPointerException e) {
             e.getMessage();
         }
