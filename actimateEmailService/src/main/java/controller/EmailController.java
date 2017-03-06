@@ -5,6 +5,7 @@ import dao.EmailAddressDao;
 import dao.impl.EmailAddressDaoImpl;
 import model.Email;
 import model.Sender;
+import org.json.JSONObject;
 import service.EmailService;
 import spark.Request;
 import spark.Response;
@@ -22,35 +23,41 @@ public class EmailController {
         this.service = service;
     }
 
-    private void saveAdresses(Request req) {
-        String emailString = req.queryParams("emails");
-        emailAddressDao.save(new ArrayList<>(
-                Arrays.asList(emailString.split(","))));
-    }
-
-    public Response sendToAddresses(Request req, Response res) {
-        saveAdresses(req);
-        List<String> addresses = emailAddressDao.getAllNew();
-        if (addresses != null) {
-            addresses.stream()
-                    .filter(address ->
-                            service.send(createEmail(address, req)))
-                    .forEach(address ->
-                            emailAddressDao.switchSentStatus(address));
+    public Response saveAdresses(Request req, Response res) {
+        JSONObject jsonRequest = new JSONObject(req.body());
+        List<String> emails = new ArrayList<>(Arrays.asList(jsonRequest.get("emails").toString().split(",")));
+        String template = jsonRequest.get("template").toString();
+        String subject = jsonRequest.get("subject").toString();
+        try {
+            emailAddressDao.save(emails, template, subject);
+        } catch (NullPointerException e) {
+            e.getMessage();
         }
         return res;
     }
 
+    public void sendToAddresses() {
+        List<Email> emails = emailAddressDao.getAllNew();
+        if (emails.size() > 0) {
+            emails.stream()
+                    .filter(email ->
+                            service.send(attachSender(email)))
+                    .forEach(address ->
+                            emailAddressDao.switchSentStatus(address.getReceiver()));
+        }
+    }
+
     public String sentAddresses(Request req, Response res) {
         List<String> addresses = new ArrayList<>();
-        for (String address : emailAddressDao.getAllSent()) {
-            addresses.add(address);
+        for (Email email : emailAddressDao.getAllSent()) {
+            addresses.add(email.getReceiver());
             emailAddressDao.removeSent();
         }
         return String.join(",", addresses);
     }
 
-    private Email createEmail(String recipient, Request req) {
-        return new Email(new Sender(), recipient, req.queryParams("subject"), req.queryParams("template"));
+    private Email attachSender(Email email) {
+        email.setSender(new Sender());
+        return email;
     }
 }

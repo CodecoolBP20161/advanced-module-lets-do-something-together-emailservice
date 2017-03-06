@@ -8,8 +8,7 @@ public class Email {
     private String subject;
     private String body;
 
-    public Email(Sender sender, String receiver, String subject, String body) {
-        this.sender = sender;
+    public Email(String receiver, String subject, String body) {
         this.receiver = receiver;
         this.subject = subject;
         this.body = body;
@@ -17,6 +16,10 @@ public class Email {
 
     public Sender getSender() {
         return sender;
+    }
+
+    public void setSender(Sender sender) {
+        this.sender = sender;
     }
 
     public String getReceiver() {

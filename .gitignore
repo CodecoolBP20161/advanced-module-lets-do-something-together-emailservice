@@ -10,3 +10,13 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+# intelliJ related files
+actimateEmailService/.idea/
+actimateEmailService/actimateEmailService.iml
+actimateEmailService/target/
+.idea/
+
+# config
+actimateEmailService/src/main/resources/db.properties
+actimateEmailService/src/main/resources/sender.properties
