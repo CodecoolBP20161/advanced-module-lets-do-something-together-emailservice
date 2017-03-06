@@ -5,6 +5,7 @@ import dao.EmailAddressDao;
 import dao.impl.EmailAddressDaoImpl;
 import model.Email;
 import model.Sender;
+import org.json.JSONObject;
 import service.EmailService;
 import spark.Request;
 import spark.Response;
@@ -23,12 +24,12 @@ public class EmailController {
     }
 
     public Response saveAdresses(Request req, Response res) {
-        String emailString = req.queryParams("emails");
+        JSONObject jsonRequest = new JSONObject(req.body());
+        List<String> emails = new ArrayList<>(Arrays.asList(jsonRequest.get("emails").toString().split(",")));
+        String template = jsonRequest.get("template").toString();
+        String subject = jsonRequest.get("subject").toString();
         try {
-            emailAddressDao.save(new ArrayList<>(Arrays.asList(
-                    emailString.replaceAll(" ", "+").split(","))),
-                    req.queryParams("template"),
-                    req.queryParams("subject"));
+            emailAddressDao.save(emails, template, subject);
         } catch (NullPointerException e) {
             e.getMessage();
         }
