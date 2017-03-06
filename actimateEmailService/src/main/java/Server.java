@@ -19,15 +19,15 @@ public class Server {
         emailController = new EmailController(EmailService.getInstance());
         DbHandler.setConnection();
 
-        get("/", emailController::saveAdresses);
+        post("/", emailController::saveAdresses);
         get("/sent", emailController::sentAddresses);
 
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                try{
+                try {
                     emailController.sendToAddresses();
-                } catch (NullPointerException e){
+                } catch (NullPointerException e) {
                     e.getMessage();
                 }
             }
