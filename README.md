@@ -25,11 +25,11 @@ SENDER_ADDRESS={your_email}
 ```
 
 ## :white_check_mark: To send emails
-You need the following json sent to `http://localhost:60227/`:
+You need the following `json` sent to `http://localhost:60227/`:
   * An arbitrary number of email addresses in `String` format, separated by a comma ("*,*") under the name `emails`.
   * Your desired `html` template along with the name `template`. It also works with plain `String` text as the body of the email.
   * Subject of the email(s) called `subject`.
-#### example request:
+  * **example request**:
 ```
 {"emails":"email@example.com,email2@example.com",
  "template":"<h1>hello</h1>",
