@@ -1,1 +1,1 @@
-web java $JAVA_OPTS -jar target/actimateEmailService-1.0.jar
+web: java $JAVA_OPTS -cp target/actimateEmailService-1.0.jar $PORT
