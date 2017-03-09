@@ -14,8 +14,7 @@ public class Server {
 
     public static void main(String[] args) {
         exception(Exception.class, (e, req, res) -> e.printStackTrace());
-        port(60227);
-
+        
         emailController = new EmailController(EmailService.getInstance());
         DbHandler.setConnection();
 
